@@ -1,0 +1,16 @@
+{
+  "name": "juansan",
+  "version": "1.0.0",
+  "author": "Matt Born <matt@sproutsocial.com>",
+  "private": true,
+  "devDependencies": {
+    "bower": "*",
+    "grunt": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-connect": "*",
+    "grunt-contrib-htmlmin": "*",
+    "grunt-contrib-less": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-shell": "*"
+  }
+}

@@ -1,0 +1,560 @@
+@import '/helpers.less';
+@import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+
+//  This file will be included on every page, and it should not be imported in
+//  other stylesheets. Use helpers.less for shared variables, mixins, etc.
+
+html {
+	height: 100%;
+	background: @gray93;
+	color: @gray30;
+	font: 14px/1 'proxima nova', 'Helvetica Neue', Arial, sans-serif;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+body { margin: 0; }
+
+//  Copied from web-app-core/css/global/00-new-base.css:
+
+//  Typography
+
+.heading { letter-spacing: .1em; text-transform: uppercase;
+	&-small {
+		color: @gray60;
+		font-size: 12px;
+		margin-left: 5px;
+		text-transform: none;
+	}
+}
+.highlight { background: @highlighter; margin: 0 -2px; padding: 0 2px; }
+
+// Groups
+// eventually we'll want to move to a numbered color system as opposed to the actual color name
+.group-color-brown { color: @grp-brown; }
+.group-color-red { color: @grp-red; }
+.group-color-green { color: @grp-green; }
+.group-color-gray { color: @grp-gray; }
+.group-color-orange { color: @grp-orange; }
+.group-color-magenta { color: @grp-magenta; }
+.group-color-indigo { color: @grp-indigo; }
+.group-color-teal { color: @grp-teal; }
+.group-color-purple { color: @grp-purple; }
+
+//  Actions
+.button-style() {
+	display: inline-block;
+	padding: 0 20px;
+	min-width: 120px;
+
+	color: @white;
+	font-size: 14px;
+	font-weight: @semibold;
+	letter-spacing: .1em;
+	line-height: @gutter-size;
+	.proxima-stack();
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+
+	border: 0 none; // needed for overriding the default input button styles on browsers
+	border-radius: 4px;
+	cursor: pointer;
+	outline: 0;
+
+	&:active {
+    	position: relative;
+    	top: 1px;
+
+		&:before { // allows the button to still exist at the first Y pixel even though its position is moved down
+			content: '';
+			position: absolute;
+			top: -1px;
+			right: 0;
+			height: 1px;
+			width: 100%;
+		}
+	}
+
+	&.disabled {
+		&, &:hover {
+			background: @gray83;
+			border-color: transparent;
+			color: @gray93 !important; // must override other colors
+			cursor: not-allowed;
+			pointer-events: auto;
+		}
+		&:active { top: 0; }
+	}
+}
+
+.action { .button-style(); }
+
+.default-action, .passive-action {
+	letter-spacing: .05em;
+	background-color: @gray83;
+	line-height: (@gutter-size - 2px); // to account for the border
+}
+
+.default-action {
+	color: @gray50;
+	border: 1px solid @gray70;
+
+	&:hover { background-color: @gray70; color: @gray40; }
+}
+
+.passive-action {
+	color: @gray40;
+	border: 1px solid @gray70;
+
+	&:hover { background-color: @gray87; border-color: @gray70; }
+}
+
+.primary-action {
+	background: @green;
+	position: relative;
+
+	// Must override the transitional reset :(
+	button& { color: @white !important; }
+
+	&:hover { background: @green-hover; }
+
+	// Spinner
+	&:after {
+		width: 100%; height: 100%;
+		background: @green url('@{cdnDomain}/spinner-2.gif') no-repeat center;
+		border-radius: inherit;
+		content: '';
+		display: block;
+		opacity: 0;
+		position: absolute;
+		top: 0; left: 0;
+		transition: .3s;
+	}
+	&.spin {
+		cursor: default;
+		&:after { opacity: 1; }
+		&:hover { background: @green; }
+	}
+}
+
+.secondary-action {
+	background-color: @gray60;
+
+	&:hover { background-color: @gray50; }
+}
+
+.common-action { .blue(); }
+.warning-action { .red(); }
+
+.inline-action, // need to figure out how to rename these
+.inline-link { &:hover { text-decoration: underline; } }
+
+.secondary-link {
+	color: @gray60;
+	font-weight: 600;
+	margin: 0 15px;
+	text-transform: lowercase;
+
+	&:hover { color: @blue; text-decoration: underline; }
+}
+
+//  Forms
+
+.input { 
+	border: 1px solid @gray87; 
+	padding: 6px 7px 5px; 
+	
+	&:active {
+		border-color: @green; 
+	}
+}
+
+.radio,
+.checkbox { opacity: 0; position: absolute; }
+.radio-visible,
+.checkbox-visible {
+	width: 20px; height: 20px;
+	background: @white;
+	border: 1px solid @gray97;
+	box-shadow: inset 0 1px 2px rgba(0,0,0,.3);
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	vertical-align: middle;
+}
+.checkbox-visible { margin: 0 5px 0 0; }
+.radio-label-text,
+.checkbox-label-text { vertical-align: middle; }
+.radio:focus + .radio-label .radio-visible,
+.checkbox:focus + .checkbox-label .checkbox-visible {
+	border-color: @green;
+	box-shadow: inset 0 1px 2px rgba(0,0,0,.3), 0 0 5px @green;
+}
+.radio:disabled + .radio-label .radio-visible,
+.checkbox:disabled + .checkbox-label .checkbox-visible { background: @gray93; }
+.radio:disabled + .radio-label .radio-label-text,
+.checkbox:disabled + .checkbox-label .checkbox-label-text { color: @gray70; }
+
+.radio-visible { border-radius: 50%; }
+.radio:checked + .radio-label .radio-visible:after {
+	width: 6px; height: 6px;
+	background: @gray30;
+	border-radius: 4px;
+	content: '';
+	position: absolute;
+	left: 6px; top: 6px;
+}
+
+.no-access:checked + .radio-label .radio-visible:after {
+	width: 8px; height: 5px;
+	background: @google;
+	border-radius: 0;
+	top: 7px; left: 5px;
+}
+
+.checkbox-visible { border-radius: 3px; }
+.checkbox:checked + .checkbox-label .checkbox-visible:after,
+.checkbox:hover + .checkbox-label .checkbox-visible:after {
+	width: 3px; height: 9px;
+	border-style: solid;
+	border-width: 0 3px 3px 0;
+	content: '';
+	position: absolute;
+	top: 2px; left: 6px;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+.checkbox:hover + .checkbox-label .checkbox-visible:after { border-color: @gray90; }
+.checkbox:checked + .checkbox-label .checkbox-visible:after { border-color: @gray30; }
+
+.right-checkbox .checkbox {
+	&-label {
+		display: block;
+		line-height: 20px;
+		padding: 10px 20px;
+		position: relative;
+	}
+	&-visible { float: right; margin: 0; }
+}
+
+.select-wrap {
+	.box-shadow(0 -1px rgba(0,0,0,.2) inset);
+	background: @gray90 url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNSIgaGVpZ2h0PSIzMCI+PHBvbHlnb24gZmlsbD0iIzlDOUM5QyIgcG9pbnRzPSI1LjA3LDE3LjA3MiAwLDEyIDEwLjE0MiwxMiIvPjwvc3ZnPg==) no-repeat right center;
+	.border-radius(5px);
+	height: 30px;
+	margin: 5px 0;
+	overflow: hidden;
+	vertical-align: middle;
+}
+.select {
+	-webkit-appearance: none;
+	   -moz-appearance: none; // this doesn't actually work to get rid of the dotted focus line. Perhaps one day it will.
+			appearance: none;
+	background: transparent;
+	border: 0;
+	color: @gray60;
+	cursor: pointer;
+	font-family: inherit;
+	height: 30px;
+	outline: 0;
+	padding: 6px 10px;
+	visibility: visible !important; // overrides the reset used for jQuery UI dropdowns
+	width: 135%;
+
+	&:focus { color: @gray30; background: rgba(0,0,0,.1); }
+}
+
+//  CSS Tooltips
+
+.has-tooltip { cursor: pointer; position: relative;
+	&:hover .tooltip { display: block; }
+	.tooltip {
+		width: 200px;
+		background: @gray15;
+		border-radius: 2px;
+		color: @white;
+		display: none;
+		margin-left: -100px;
+		padding: 10px;
+		position: absolute;
+		left: 50%;
+
+		&:after {
+			width: 10px; height: 10px;
+			background: @gray15;
+			content: '';
+			display: block;
+			margin-left: -5px;
+			position: absolute;
+			top: -5px; left: 50%;
+			.transform(rotate(45deg));
+		}
+	}
+}
+
+//  Profiles
+
+.base-profile { .clear(); padding: 10px; position: relative;
+	.profile {
+		&-img { width: 40px; height: 40px; float: left; margin-right: 10px; }
+		&-b {
+			display: block;
+			line-height: 20px;
+			margin-top: 2px;
+			.truncate();
+		}
+		&-vanity-url { font-weight: @buff; padding-left: 10px; }
+		&-icon {
+			width: 12px; height: 12px;
+			background: url('@{cdnDomain}/Networks-Micro.svg') no-repeat 0 0;
+			display: inline-block;
+			margin-right: 5px;
+			vertical-align: middle;
+
+			&.twitter-icon { background-position: -536px -290px; }
+			&.facebook-icon { background-position: -536px -310px; }
+			&.gplus-icon { background-position: -536px -330px; }
+			&.linkedin-icon,
+			&.linkedin_company-icon { background-position: -536px -350px; }
+		}
+		&-span {
+			color: @gray60;
+			display: inline-block;
+			font-size: 13px;
+			vertical-align: middle;
+			.truncate();
+		}
+		&-link {
+			color: @blue;
+			line-height: 20px;
+			text-transform: lowercase;
+		}
+		&-status {
+			width: 16px; height: 16px;
+			background: url('@{cdnDomain}/checkplusminus.svg') no-repeat 0 0;
+			border-radius: 50%;
+			content: '';
+			display: block;
+			position: absolute;
+			top: 22px; right: 22px;
+		}
+	}
+	.profile-link,
+	.checkbox-label { position: absolute; top: 20px; right: 20px; }
+	.add-profile { display: none; }
+}
+
+.profile-item:nth-child(odd) { background: @gray93; }
+.standard .profile-item:hover { background: @gray87; cursor: pointer; }
+
+.twitter-icon { color: @twitter; }
+
+//  Zebra Tables
+.zebra {
+	&-tr:nth-child(even) { background: @gray97; }
+	&-th,
+	&-td { padding: 10px; text-align: center; }
+	&-th:first-child,
+	&-td:first-child { text-align: left; }
+}
+.standard .zebra {
+	&-tr { cursor: pointer; }
+	&-tr:hover { background: @gray90; }
+	&-th,
+	&-td { padding: 10px 0; }
+	&-th:first-child,
+	&-td:first-child { padding: 10px; }
+}
+.select-column {
+	color: @gray50;
+	font: 12px 'proxima-nova-condensed', 'Helvetica Neue', Arial, sans-serif;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+	
+	&:hover { color: @gray30; }
+}
+
+//  Inline Editor
+
+.inline-edit { display: inline-block; position: relative;
+	
+	&-validation {
+		background: @gray20;
+		border-radius: 2px;
+		color: @white;
+		font-size: 12px;
+		line-height: 14px;
+		padding: 10px;
+		position: absolute;
+		bottom: 31px; left: 0;
+		
+		&:after {
+			.tri-down(7px, @gray20);
+			content: '';
+			position: absolute;
+			bottom: -7px; left: 10px;
+		}
+	}
+	&.success {
+		.inline-edit-validation { background: @green;
+			&:after { .tri-down(7px, @green); }
+		}
+	}
+	&.error {
+		.inline-edit-input { border: 1px solid @red !important; } // hack @mattborn
+		.inline-edit-validation { background: @red;
+			&:after { .tri-down(7px, @red); }
+		}
+	}
+}
+
+// Modals
+.modal {
+	// .transitional-reset();
+	min-height: 100%;
+	margin: 0 auto;
+	position: relative;
+
+	// add .modal-open to body so modal can take over page scroll
+	// This style should only be applied to body, so the tag is included for specificity
+	body&-open { height: 100%; overflow: hidden; }
+
+	&-overlay {
+		.transition(background-color, 80ms);
+		width: 100%; height: 100%;
+		background: rgba(0,0,0,.65);
+		box-sizing: content-box !important; // IE fix
+		display: none;
+		overflow-y: scroll;
+		position: fixed;
+		top: 0; left: 0;
+		z-index: 1000;
+	}
+
+	&-content { position: relative; }
+	&-header, &-footer { .clear(); line-height: 30px; padding: 20px 30px; }
+	&-body { padding: 30px; }
+	&-header { background: @white; }
+	&-footer { background: @gray93;
+		&-message { max-width: 460px; color: @gray50; float: left;
+			&.restricted { font-size: 12px; }
+		}
+	}
+	&-actions { float: right; text-align: right; }
+	&-close-x { cursor: pointer; }
+
+	&.offscreen{ .transform(~"translate(0, -100%)");
+	    &.down{ .transform(~"translate(0, 100%)"); }
+	}
+	&.transitioning { .transform(~"translate(0, 0)"); }
+	&.in { .transition(all, 150ms, ~"cubic-bezier(0.95, 0.05, 0.795, 0.035)") }
+	&.out{
+		@speed: 450ms;
+		@easing: ~"cubic-bezier(0.190, 1.000, 0.220, 1.000)";
+		-webkit-transition: -webkit-transform @speed @easing;
+		   -moz-transition: -moz-transform @speed @easing;
+		     -o-transition: -o-transform @speed @easing;
+		        transition: transform @speed @easing;
+	}
+
+	// TO DO: Rewrite these class names to adhere to new naming conventions
+	.heading { color: @gray50; }
+	.secondary-link { margin-right: 15px; }
+}
+
+.dialog-modal, .confirm-modal {
+	height: 100%;
+	&::before {
+		width: 1px; height: 100%;
+		content: '';
+		display: inline-block;
+		margin-right: -1px;
+		vertical-align: middle;
+	}
+	> .modal-content {
+		width: 100%;
+		display: inline-block;
+		margin-top: 60px;
+		padding-bottom: 60px;
+		vertical-align: middle;
+		> .modal-body { background: @white; }
+	}
+}
+.dialog-modal { width: 600px; }
+.confirm-modal { width: 400px; }
+.tall-modal {
+	width: 720px; height: auto;
+	background: @white;
+	padding-bottom: 70px;
+	position: relative;
+
+	.modal-footer {
+		width: 720px; height: 70px;
+		bottom: 0;
+		position: fixed;
+	}
+	&.in-stack {
+		padding-bottom:0px;
+		> .modal-content { margin-bottom: 0px; max-height: 50px; overflow: hidden; }
+		.tall-modal { 
+			.confirm-body{ background-color: @white; }
+
+			// Stack shadow
+			&::before{
+				width: 100%; height: 0px;
+				content: '';
+				display: block;
+				box-shadow: 0px 20px 50px 19px @gray20;
+			}
+		}
+	}
+	&.in, &.out {
+		.modal-footer { position:absolute; }
+	}
+	&.centered { box-shadow: 0px 20px 50px 19px @gray20; min-height: 50%; top: 20%; }
+}
+
+/*  
+	Shake effect for modal, from animate.css:
+	https://github.com/daneden/animate.css
+*/
+
+@-webkit-keyframes pulse {
+    0% { -webkit-transform: scale(1); }
+	50% { -webkit-transform: scale(1.1); }
+    100% { -webkit-transform: scale(1); }
+}
+@-moz-keyframes pulse {
+    0% { -moz-transform: scale(1); }
+	50% { -moz-transform: scale(1.1); }
+    100% { -moz-transform: scale(1); }
+}
+@-o-keyframes pulse {
+    0% { -o-transform: scale(1); }
+	50% { -o-transform: scale(1.1); }
+    100% { -o-transform: scale(1); }
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+	50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.animated {
+	-webkit-animation-duration: 0.5s;
+	   -moz-animation-duration: 0.5s;
+	     -o-animation-duration: 0.5s;
+	        animation-duration: 0.5s;
+	-webkit-animation-fill-mode: both;
+	   -moz-animation-fill-mode: both;
+	     -o-animation-fill-mode: both;
+	        animation-fill-mode: both;
+	&.pulse {
+		-webkit-animation-name: pulse;
+		-moz-animation-name: pulse;
+		-o-animation-name: pulse;
+		animation-name: pulse;
+	}
+}
