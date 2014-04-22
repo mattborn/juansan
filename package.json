@@ -10,6 +10,7 @@
     "grunt-contrib-connect": "*",
     "grunt-contrib-htmlmin": "*",
     "grunt-contrib-less": "*",
+    "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "*",
     "grunt-shell": "*"
   }
